@@ -346,7 +346,7 @@ end
 
 createButton(10, 0, tostring(tilesToFlip), onEditRadiusButtonTouch)
 createButton(50, 0, "Passable: " .. tostring(makePassable), onPassableButtonTouch)
-createButton(100, 0, "Load", onPassableButtonTouch)
+createButton(100, 0, "Load", onLoadButtonTouch)
 createButton(124, 0, "Save", onSaveButtonTouch)
 createButton(164, 0, "Load Image", onImageButtonTouch)
 createButton(230, 0, "Move Grid: " .. tostring(moveGridMode), onMoveGridButtonTouch)
