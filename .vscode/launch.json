@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    
+  
+        {
+            "type": "lua-local",
+            "request": "launch",
+            "name": "Debug Corona",
+            "program": {
+                "command": "/Applications/Corona/Corona Simulator.app/Contents/MacOS/Corona Simulator"
+            },
+            "args": [
+                "-no-console YES -debug 1 -project '${workspaceFolder}/main.lua'"
+            ]
+        }
+    ]
+  }
