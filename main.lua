@@ -22,6 +22,11 @@ local gridYOffset = 0
 local loadGridFromFile, loadImageFromFile, createTile, createIsometricGrid, createGrid, gridToGridArray, saveGridToFile
 local onButtonTouch, button, buttonText, instructionsVisible
 
+-- Create display groups
+local backGroup = display.newGroup()  -- This will contain the grid and image
+local frontGroup = display.newGroup()  -- This will contain the buttons
+
+
 loadGridFromFile = function() 
     local path = tfd.openFileDialog{
         title = "Load Grid",
@@ -115,6 +120,7 @@ loadImageFromFile = function()
             overlayImage.alpha = 0.5
             overlayImage.isHitTestable = moveImageMode
             overlayImage:addEventListener("touch", moveImage)  -- add the listener
+            backGroup:insert(overlayImage)  -- Insert the overlayImage into the backGroup
         else
             print("Error loading image: " .. path)
         end
@@ -267,7 +273,7 @@ local function createButton(x, y, text, touchFunction)
         return true
     end
     buttonGroup:addEventListener("touch")
-
+    frontGroup:insert(buttonGroup)
     return buttonGroup, buttonText
 end
 
@@ -282,6 +288,13 @@ local function onPassableButtonTouch(button)
         makePassable = not makePassable
         button.text.text = "Passable: " .. tostring(makePassable)
 end
+local function insertGridToBack(grid) 
+    for i = 1, #grid do
+        for j = 1, #grid[i] do
+            backGroup:insert(grid[i][j])
+        end
+    end
+end
 local function onLoadButtonTouch(button)
     local gridArray = loadGridFromFile()
     if gridArray then
@@ -291,6 +304,7 @@ local function onLoadButtonTouch(button)
             end
         end
         grid = createIsometricGrid(gridArray)
+        insertGridToBack(grid)
     end
 end
 local function onSaveButtonTouch(button)
@@ -340,8 +354,11 @@ createButton(300, 0, "Move Image: " .. tostring(moveImageMode), onMoveImageButto
 createButton(370, 0, "+", onIncreaseSizeButtonTouch)
 createButton(390, 0, "-", onDecreaseSizeButtonTouch)
 
+
 gridArray = createGrid(50, 50)
 grid = createIsometricGrid(gridArray)
+insertGridToBack(grid)
+
 
 local function onKeyEvent(event)
     if event.keyName == "z" and event.phase == "down" then
@@ -356,6 +373,7 @@ local function onKeyEvent(event)
             end
             -- Create the grid from the previous state
             grid = createIsometricGrid(gridArray)
+            insertGridToBack(grid)
             for i = 1, #grid do
                 for j = 1, #grid[i] do
                     local tile = grid[i][j]
